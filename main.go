@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 
+	"github.com/anwam/car-rental-backend/internal/cars"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -16,16 +17,15 @@ func main() {
 	})
 
 	e.GET("/cars", func(c echo.Context) error {
-		return c.JSON(200, map[string]interface{}{
-			"hello": "world",
-		})
+		return cars.GetCars(c)
+	})
+
+	e.GET("/cars/:id", func(c echo.Context) error {
+		return cars.GetCar(c)
 	})
 
 	e.POST("/cars", func(c echo.Context) error {
-		return c.JSON(200, map[string]interface{}{
-			"hello": "world",
-		})
-
+		return cars.CreateCar(c)
 	})
 
 	e.PATCH("/cars/:id", func(c echo.Context) error {

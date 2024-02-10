@@ -2,13 +2,17 @@ GET http://localhost:1323/cars
 
 ###
 
-POST http://localhost:1323/cars
+GET http://localhost:1323/cars/0
 
+###
+
+POST http://localhost:1323/cars
 Content-Type: application/json
+
 {
-    "name": "Car Name",
-    "price": 50000,
-    "discount": 10
+    "name": "Toyota Altis",
+    "price": 75000,
+    "discount": 12
 }
 
 ###
