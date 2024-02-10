@@ -29,11 +29,7 @@ func main() {
 	})
 
 	e.PATCH("/cars/:id", func(c echo.Context) error {
-		id := c.Param("id")
-		return c.JSON(200, map[string]interface{}{
-			"hello": "world",
-			"id":    id,
-		})
+		return cars.EditCar(c)
 	})
 
 	e.DELETE("/cars/:id", func(c echo.Context) error {

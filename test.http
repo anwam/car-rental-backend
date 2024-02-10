@@ -21,7 +21,7 @@ PATCH http://localhost:1323/cars/1
 Content-Type: application/json
 
 {
-  "price": 7000
+  "price": 70000
 }
 
 ###
@@ -29,7 +29,7 @@ PATCH http://localhost:1323/cars/1
 Content-Type: application/json
 
 {
-  "discount": 15
+  "discount": 20
 }
 
 ###
