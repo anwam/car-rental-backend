@@ -1,0 +1,33 @@
+GET http://localhost:1323/cars
+
+###
+
+POST http://localhost:1323/cars
+
+Content-Type: application/json
+{
+    "name": "Car Name",
+    "price": 50000,
+    "discount": 10
+}
+
+###
+
+PATCH http://localhost:1323/cars/1
+Content-Type: application/json
+
+{
+  "price": 7000
+}
+
+###
+PATCH http://localhost:1323/cars/1
+Content-Type: application/json
+
+{
+  "discount": 15
+}
+
+###
+
+DELETE http://localhost:1323/cars/1
