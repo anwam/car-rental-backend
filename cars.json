@@ -1,6 +1,1 @@
-[
-  { "id": 1, "name": "Toyota Altis", "price": 70000, "discount": 20 },
-  { "id": 3, "name": "Honda Civic", "price": 45000, "discount": 13 },
-  { "id": 6, "name": "Honda Accord", "price": 95000, "discount": 17 },
-  { "id": 5, "name": "Honda City", "price": 15000, "discount": 17 }
-]
+[{"id":1,"name":"Toyota Altis","price":70000,"discount":20},{"id":3,"name":"Honda Civic","price":45000,"discount":13},{"id":6,"name":"Honda Accord","price":95000,"discount":17},{"id":5,"name":"Honda City","price":15000,"discount":17},{"id":7,"name":"Toyota Vigo","price":12000,"discount":0},{"id":8,"name":"Mazda 3","price":89000,"discount":5}]
