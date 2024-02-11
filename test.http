@@ -10,9 +10,9 @@ POST http://localhost:1323/cars
 Content-Type: application/json
 
 {
-    "name": "Toyota Altis",
-    "price": 75000,
-    "discount": 12
+    "name": "Honda Accord",
+    "price": 95000,
+    "discount": 17
 }
 
 ###
@@ -34,4 +34,4 @@ Content-Type: application/json
 
 ###
 
-DELETE http://localhost:1323/cars/1
+DELETE http://localhost:1323/cars/4

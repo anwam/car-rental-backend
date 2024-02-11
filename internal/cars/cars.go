@@ -57,6 +57,14 @@ func GetCar(c echo.Context) error {
 	json.NewDecoder(carFile).Decode(&cars)
 
 	id := c.Param("id")
+
+	if id == "" {
+		return c.JSON(400, map[string]interface{}{
+			"message": "id must be provided as params",
+			"error":   "car id does not exists on path params",
+		})
+	}
+
 	idInt, _ := strconv.Atoi(id)
 	var car Car
 	found := false
@@ -83,6 +91,7 @@ func GetCar(c echo.Context) error {
 
 func CreateCar(c echo.Context) error {
 	bytes, err := os.ReadFile("cars.json")
+
 	if err != nil {
 		return c.JSON(500, map[string]interface{}{
 			"message": "interal server error",
@@ -94,6 +103,7 @@ func CreateCar(c echo.Context) error {
 	json.Unmarshal(bytes, &cars)
 
 	var newCar Car
+
 	if err := c.Bind(&newCar); err != nil {
 		c.Logger().Error(err)
 		return c.JSON(400, map[string]interface{}{
@@ -101,12 +111,21 @@ func CreateCar(c echo.Context) error {
 		})
 	}
 
-	id := len(cars) + 1
+	lastID := 0
+
+	for i := range cars {
+		if cars[i].ID > lastID {
+			lastID = cars[i].ID
+		}
+	}
+
+	id := lastID + 1
 	newCar.ID = id
 	cars = append(cars, newCar)
 
 	carsBytes, _ := json.Marshal(cars)
 	err = os.WriteFile("cars.json", carsBytes, os.ModePerm)
+
 	if err != nil {
 		return c.JSON(500, map[string]interface{}{
 			"message": "add car failed",
@@ -122,6 +141,7 @@ func CreateCar(c echo.Context) error {
 
 func EditCar(c echo.Context) error {
 	var updatePayload UpdateCar
+
 	if err := c.Bind(&updatePayload); err != nil {
 		c.Logger().Error(err)
 		return c.JSON(400, map[string]interface{}{
@@ -130,10 +150,19 @@ func EditCar(c echo.Context) error {
 	}
 
 	id := c.Param("id")
+
+	if id == "" {
+		return c.JSON(400, map[string]interface{}{
+			"message": "id must be provided as params",
+			"error":   "car id does not exists on path params",
+		})
+	}
+
 	idInt, _ := strconv.Atoi(id)
 
 	var cars []Car
 	carsBytes, err := os.ReadFile("cars.json")
+
 	if err != nil {
 		return c.JSON(500, map[string]interface{}{
 			"message": "interal server error",
@@ -144,6 +173,7 @@ func EditCar(c echo.Context) error {
 	json.Unmarshal(carsBytes, &cars)
 	var targetCar *Car
 	found := false
+
 	for i := range cars {
 		if cars[i].ID == idInt {
 			found = true
@@ -152,6 +182,7 @@ func EditCar(c echo.Context) error {
 		}
 		continue
 	}
+
 	if !found {
 		return c.JSON(404, map[string]interface{}{
 			"message": "car " + id + " does not exist",
@@ -161,15 +192,18 @@ func EditCar(c echo.Context) error {
 	if updatePayload.Discount != nil {
 		targetCar.Discount = *updatePayload.Discount
 	}
+
 	if updatePayload.Name != nil {
 		targetCar.Name = *updatePayload.Name
 	}
+
 	if updatePayload.Price != nil {
 		targetCar.Price = *updatePayload.Price
 	}
 
 	updatedCarsBytes, _ := json.Marshal(cars)
 	err = os.WriteFile("cars.json", updatedCarsBytes, os.ModePerm)
+
 	if err != nil {
 		return c.JSON(500, map[string]interface{}{
 			"message": "update car failed",
@@ -180,5 +214,63 @@ func EditCar(c echo.Context) error {
 	return c.JSON(201, map[string]interface{}{
 		"message": "car updated",
 		"data":    *targetCar,
+	})
+}
+
+func DeleteCar(c echo.Context) error {
+	id := c.Param("id")
+
+	if id == "" {
+		return c.JSON(400, map[string]interface{}{
+			"message": "id must be provided as params",
+			"error":   "car id does not exists on path params",
+		})
+	}
+
+	idInt, _ := strconv.Atoi(id)
+
+	var cars []Car
+	carsBytes, err := os.ReadFile("cars.json")
+
+	if err != nil {
+		c.Logger().Errorf("cannot read cars.json file due to %s", err.Error())
+		return c.JSON(500, map[string]interface{}{
+			"message": "internal server error",
+			"error":   "cannot read cars data",
+		})
+	}
+
+	json.Unmarshal(carsBytes, &cars)
+	found := false
+
+	for i := range cars {
+		if cars[i].ID == idInt {
+			found = true
+			// orders is not important
+			cars[i] = cars[len(cars)-1] // replace cars i with last cars
+			cars = cars[:len(cars)-1]   // remove last cars
+			break
+		}
+		continue
+	}
+
+	if !found {
+		return c.JSON(404, map[string]interface{}{
+			"message": "car " + id + " does not exist",
+		})
+	}
+
+	updatedCarsBytes, _ := json.Marshal(cars)
+	err = os.WriteFile("cars.json", updatedCarsBytes, os.ModePerm)
+
+	if err != nil {
+		return c.JSON(500, map[string]interface{}{
+			"message": "delete car failed",
+			"error":   "write file error due to " + err.Error(),
+		})
+	}
+
+	return c.JSON(201, map[string]interface{}{
+		"message": "car has been deleted",
 	})
 }

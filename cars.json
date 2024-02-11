@@ -1,1 +1,6 @@
-[{"id":1,"name":"Toyota Altis","price":70000,"discount":20},{"id":2,"name":"Toyota Altis","price":75000,"discount":12}]
+[
+  { "id": 1, "name": "Toyota Altis", "price": 70000, "discount": 20 },
+  { "id": 3, "name": "Honda Civic", "price": 45000, "discount": 13 },
+  { "id": 6, "name": "Honda Accord", "price": 95000, "discount": 17 },
+  { "id": 5, "name": "Honda City", "price": 15000, "discount": 17 }
+]
